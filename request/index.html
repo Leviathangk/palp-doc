@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Request - Palp 中文文档</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Request";
+        var mkdocs_page_input_path = "request.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Palp 中文文档
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../command/">Command</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../spider/">Spider</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../database/">Database</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../middleware/">Middleware</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../pipeline/">Pipeline</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../item/">Item</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Request</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#_1">方法</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_2">参数</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_3">注意</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_4">使用</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../response/">Response</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../alarm/">Alarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../other/">Other</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Palp 中文文档</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+      <li>Request</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="request">Request</h1>
+<h2 id="_1">方法</h2>
+<ul>
+<li>RequestGet</li>
+<li>RequestPost</li>
+<li>RequestDelete</li>
+<li>RequestOptions</li>
+<li>RequestHead</li>
+<li>RequestPatch</li>
+</ul>
+<h2 id="_2">参数</h2>
+<ul>
+<li>filter_repeat：是否过滤请求（默认不过滤）</li>
+<li>keep_session：是否保持 session 自动 cookie，tls 连接</li>
+<li>keep_cookie：自动 cookieJar</li>
+<li>callback：回调函数（必须有）</li>
+<li>cookie_jar：cookieJar（自动创建、传递，可通过此参数获取 cookie）</li>
+<li>priority：使用优先级队列时的优先级（默认）</li>
+<li>downloader：自定义的下载器（不需要实例化）</li>
+<li>downloader_parser：自定义的下载解析器（不需要实例化）</li>
+<li>command：自定义下载器时的传参字典</li>
+</ul>
+<p>除了 requests、httpx 参数常用外，还可以通过 command 指定其它参数，方便自定义请求器时使用</p>
+<h2 id="_3">注意</h2>
+<ul>
+<li>请求过滤默认是不开启的，需要开启 settings.FILTER_REQUEST（普通过滤）</li>
+<li>在开启普通过滤的情况下，可以选择开启 settings.STRICT_FILTER（严格过滤）加锁，严重影响性能，不推荐</li>
+<li>keep_session 虽然可以提高部分效率，但是除非你对 cookie 要求不高，否则分布式 cookie 无法随着请求发到其他机器</li>
+<li>keep_cookie 推荐，类似 scrapy 手动使用 cookiejar，这里只要一直 keep_cookie=True 就行</li>
+<li>请求队列默认是 优先级队列，想修改通过 settings.REQUEST_QUEUE_MODE 修改</li>
+<li>优先级队列，本身就有过滤重复请求的作用！！！</li>
+</ul>
+<h2 id="_4">使用</h2>
+<pre><code>from palp import RequestGet
+
+yield RequestGet(url='xxx')
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../item/" class="btn btn-neutral float-left" title="Item"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../response/" class="btn btn-neutral float-right" title="Response">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../item/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../response/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

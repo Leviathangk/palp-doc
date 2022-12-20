@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Database - Palp 中文文档</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Database";
+        var mkdocs_page_input_path = "database.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Palp 中文文档
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../command/">Command</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../spider/">Spider</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Database</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#_1">数据库连接</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#redis">redis</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_2">配置</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_3">使用</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#postgresql">postgresql</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_4">配置</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_5">使用</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mysql">mysql</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_6">配置</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_7">使用</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mongo">mongo</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_8">配置</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_9">使用</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#kafka">kafka</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_10">配置</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_11">使用</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../middleware/">Middleware</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../pipeline/">Pipeline</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../item/">Item</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../request/">Request</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../response/">Response</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../alarm/">Alarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../other/">Other</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Palp 中文文档</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+      <li>Database</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="database">Database</h1>
+<h2 id="_1">数据库连接</h2>
+<p>内置 quickdb 模块，含有 redis、mongo、mysql、kafka、postgresql 的连接，引用方式如下：</p>
+<pre><code>from palp import conn
+conn.redis_conn # 接原始命令
+conn.pg_conn    # 基于 sqlalchemy 魔改版本
+conn.mysql_conn # 基于 sqlalchemy 魔改版本
+conn.mongo_conn # 基于 mongo_conn 添加了部分方法，如 iter
+conn.kafka_conn # kafka_conn.send 即可
+</code></pre>
+<p>注意：内置了 SpiderRecycleMiddleware 中间件，创建的连接会自动关闭</p>
+<p>具体的使用可以看 quickdb 模块，这里强烈推荐 quickdb 针对 sqlalchemy 的数据库模板导出功能：</p>
+<pre><code>from quickdb import PostgreSQLAlchemyEngine
+
+pg_conn = PostgreSQLAlchemyEngine(
+    host=settings.PG_HOST,
+    port=settings.PG_PORT,
+    db=settings.PG_DB,
+    user=settings.PG_USER,
+    pwd=settings.PG_PWD,
+    **settings.PG_CONFIG
+)
+pg_conn.reverse_table_model(path='./models.py', tables=['xxx'])  # path 可以自动生成
+</code></pre>
+<h2 id="redis">redis</h2>
+<h3 id="_2">配置</h3>
+<pre><code>REDIS_DB = 0
+REDIS_HOST = '127.0.0.1'
+REDIS_PORT = '6379'
+REDIS_PWD = None
+</code></pre>
+<h3 id="_3">使用</h3>
+<pre><code>from palp.conn import redis_conn
+
+redis_conn.info()
+</code></pre>
+<h2 id="postgresql">postgresql</h2>
+<p>基于 sqlalchemy 进行修改，含有很多方法</p>
+<h3 id="_4">配置</h3>
+<pre><code>PG_HOST = None
+PG_PORT = None
+PG_DB = None
+PG_USER = None
+PG_PWD = None
+</code></pre>
+<h3 id="_5">使用</h3>
+<pre><code>from palp.conn import pg_conn
+
+pg_conn.execute()
+</code></pre>
+<h2 id="mysql">mysql</h2>
+<p>基于 sqlalchemy 进行修改，含有很多方法</p>
+<h3 id="_6">配置</h3>
+<pre><code>MYSQL_HOST = '127.0.0.1'
+MYSQL_PORT = 3306
+MYSQL_DB = None
+MYSQL_USER = None
+MYSQL_PWD = None
+</code></pre>
+<h3 id="_7">使用</h3>
+<pre><code>from palp.conn import mysql_conn
+
+mysql_conn.execute()
+</code></pre>
+<h2 id="mongo">mongo</h2>
+<p>基于 pymongo 进行修改，部分新增方法如下：</p>
+<ul>
+<li>iter：迭代数据库所有数据</li>
+<li>upsert：插入或更新</li>
+</ul>
+<h3 id="_8">配置</h3>
+<pre><code>MONGO_HOST = None
+MONGO_PORT = None
+MONGO_USER = None
+MONGO_PWD = None
+</code></pre>
+<h3 id="_9">使用</h3>
+<pre><code>from palp.conn import mongo_conn
+
+col = mongo_conn.get_collection(db='x', col='xx')
+for data in col.iter():
+    print(data)
+</code></pre>
+<h2 id="kafka">kafka</h2>
+<p>基于 kafka-python 修改</p>
+<h3 id="_10">配置</h3>
+<pre><code>KAFKA_SERVER = None
+</code></pre>
+<h3 id="_11">使用</h3>
+<pre><code>from palp.conn import kafka_conn
+
+kafka_conn.send()
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../spider/" class="btn btn-neutral float-left" title="Spider"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../middleware/" class="btn btn-neutral float-right" title="Middleware">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../spider/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../middleware/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

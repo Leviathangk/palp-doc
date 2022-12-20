@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Middleware - Palp 中文文档</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Middleware";
+        var mkdocs_page_input_path = "middleware.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Palp 中文文档
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../command/">Command</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../spider/">Spider</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../database/">Database</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Middleware</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#spidermiddleware">SpiderMiddleware</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_1">结构</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_2">设置</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#requestmiddleware">RequestMiddleware</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_3">结构</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_4">设置</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_5">添加代理</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../pipeline/">Pipeline</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../item/">Item</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../request/">Request</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../response/">Response</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../alarm/">Alarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../other/">Other</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Palp 中文文档</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+      <li>Middleware</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="middleware">Middleware</h1>
+<h2 id="spidermiddleware">SpiderMiddleware</h2>
+<p>这是项目中间件（可通过 spider 访问到对应的属性）</p>
+<ul>
+<li>spider_start：爬虫启动时干什么</li>
+<li>spider_error：爬虫出错时干什么</li>
+<li>spider_close：爬虫结束时干什么（必定会执行）</li>
+</ul>
+<h3 id="_1">结构</h3>
+<pre><code>import palp
+from loguru import logger
+
+
+class SpiderMiddleware(palp.SpiderMiddleware):
+    def spider_start(self, spider) -&gt; None:
+        &quot;&quot;&quot;
+        spider 开始时的操作
+
+        :param spider:
+        :return:
+        &quot;&quot;&quot;
+
+    def spider_error(self, spider, exception: Exception) -&gt; None:
+        &quot;&quot;&quot;
+        spider 出错时的操作
+
+        :param spider:
+        :param exception: 错误的详细信息
+        :return:
+        &quot;&quot;&quot;
+        logger.error(exception)
+
+    def spider_close(self, spider) -&gt; None:
+        &quot;&quot;&quot;
+        spider 结束的操作
+
+        :param spider:
+        :return:
+        &quot;&quot;&quot;
+</code></pre>
+<h3 id="_2">设置</h3>
+<p>注意：这里的 1 代表顺序</p>
+<pre><code>SPIDER_MIDDLEWARE = {
+    1: 'middlewares.middleware.SpiderMiddleware',
+}
+</code></pre>
+<h2 id="requestmiddleware">RequestMiddleware</h2>
+<p>这是请求中间件（可通过 spider 访问到对应的属性）</p>
+<ul>
+<li>request_in：请求创建时干什么</li>
+<li>request_error：请求出错时干什么（默认重试 3 次 settings.REQUEST_RETRY_TIMES）</li>
+<li>request_failed：请求失败时干什么（3 次后还失败，走这里）</li>
+<li>request_close：请求结束时干什么（执行完毕后走这里）</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li>request_failed 和 request_close 只有走其中一个</li>
+<li>不要的请求可直接抛出 DropRequestException 错误</li>
+<li>请求可以原地修改</li>
+<li>request_error 可以判断错误进行修改，或者直接 return 新的请求，旧请求自动丢弃</li>
+<li>request_close 可以判断响应是否符合预期，或者直接 return 新的请求，旧请求自动丢弃</li>
+</ul>
+<p>提示：</p>
+<ul>
+<li>分布式爬虫时，设置开启以下两个选项，即可自动保存错误请求，并存放 redis，下次请求自动继续</li>
+<li>REQUEST_FAILED_SAVE = True # 分布式时保存失败的请求（重试之后仍然失败的）</li>
+<li>REQUEST_RETRY_FAILED = True # 分布式时启动重试失败请求</li>
+</ul>
+<h3 id="_3">结构</h3>
+<pre><code>import palp
+from typing import Union
+from palp import settings
+from loguru import logger
+from palp.network.request import Request
+
+class RequestMiddleware(palp.RequestMiddleware):
+    def request_in(self, spider, request) -&gt; None:
+        &quot;&quot;&quot;
+        请求进入时的操作
+
+        :param spider:
+        :param request:
+        :return:
+        &quot;&quot;&quot;
+        if settings.REQUEST_PROXIES_TUNNEL_URL:
+            request.proxies = {
+                'http': settings.REQUEST_PROXIES_TUNNEL_URL,
+                'https': settings.REQUEST_PROXIES_TUNNEL_URL,
+            }
+
+    def request_error(self, spider, request, exception: Exception) -&gt; Union[Request, None]:
+        &quot;&quot;&quot;
+        请求出错时的操作
+
+        :param spider:
+        :param request: 该参数可返回（用于放弃当前请求，并发起新请求）
+        :param exception: 错误的详细信息
+        :return: [Request, None]
+        &quot;&quot;&quot;
+        logger.error(exception)
+
+        return
+
+    def request_failed(self, spider, request) -&gt; None:
+        &quot;&quot;&quot;
+        超过最大重试次数时的操作
+
+        :param spider:
+        :param request:
+        :return:
+        &quot;&quot;&quot;
+        logger.warning(f&quot;失败的请求：{request}&quot;)
+
+    def request_close(self, spider, request, response) -&gt; Union[Request, None]:
+        &quot;&quot;&quot;
+        请求结束时的操作
+
+        :param spider:
+        :param request: 该参数可返回（用于放弃当前请求，并发起新请求）
+        :param response:
+        :return: [Request, None]
+        &quot;&quot;&quot;
+        return
+
+</code></pre>
+<h3 id="_4">设置</h3>
+<p>注意：这里的 1 代表顺序</p>
+<pre><code>REQUEST_MIDDLEWARE = {
+    1: &quot;middlewares.middleware.RequestMiddleware&quot;,
+}
+</code></pre>
+<h3 id="_5">添加代理</h3>
+<p>注意：这里基于默认的 ResponseDownloaderByRequests 请求器（requests）</p>
+<pre><code>class RequestMiddleware(palp.RequestMiddleware):
+    def request_in(self, spider, request) -&gt; None:
+        &quot;&quot;&quot;
+        请求进入时的操作
+
+        :param spider:
+        :param request:
+        :return:
+        &quot;&quot;&quot;
+
+        # 给所有 url 都添加代理
+        if settings.REQUEST_PROXIES_TUNNEL_URL:
+            request.proxies = {
+                'http': settings.REQUEST_PROXIES_TUNNEL_URL,
+                'https': settings.REQUEST_PROXIES_TUNNEL_URL,
+            }
+
+        # 指定域名添加代理
+        allow_domains = ['xxx']
+
+        if settings.REQUEST_PROXIES_TUNNEL_URL:
+            if request.domain in allow_domains:
+                request.proxies = {
+                    'http': settings.REQUEST_PROXIES_TUNNEL_URL,
+                    'https': settings.REQUEST_PROXIES_TUNNEL_URL,
+                }
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../database/" class="btn btn-neutral float-left" title="Database"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../pipeline/" class="btn btn-neutral float-right" title="Pipeline">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../database/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../pipeline/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

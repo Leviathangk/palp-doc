@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Other - Palp 中文文档</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Other";
+        var mkdocs_page_input_path = "other.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Palp 中文文档
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../command/">Command</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../spider/">Spider</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../database/">Database</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../middleware/">Middleware</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../pipeline/">Pipeline</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../item/">Item</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../request/">Request</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../response/">Response</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../alarm/">Alarm</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Other</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#_1">增量爬虫</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_2">数据库判断</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#redis">redis 判断（不推荐）</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_3">快速二次请求</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_4">原地修改</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#to_dict">to_dict()</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_5">个性化爬虫</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_6">关于表</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#redis_1">关于 redis</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Palp 中文文档</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+      <li>Other</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="other">Other</h1>
+<h2 id="_1">增量爬虫</h2>
+<p>增量无非就是判断，建议拿主键直接判断，下面有两个简单的例子<br />
+增量一定要判断何时不翻页（继续），不然白白浪费时间，不能依仗去重</p>
+<h3 id="_2">数据库判断</h3>
+<p>即通过自己保存的数据，进行判断列表页，已出现的 url 则为已抓取，那么后续则不需要抓取<br />
+【案例】</p>
+<pre><code>is_repeat = False   # 重复标志
+
+for i in response.xpath('//ul[@class=&quot;list_con&quot;]//li'):
+    notice_url = response.urljoin(i.xpath('./a/@href').extract_first())
+
+    # 判断是否重复
+    if conn_company_notice.find_one({'notice_url': notice_url}):
+        is_repeat = True
+        break
+
+    yield palp.RequestGet(url=notice_url, callback=self.parse_content)
+
+# 翻页
+if not is_repeat and page_now &lt; page_total:
+    pass
+</code></pre>
+<h3 id="redis">redis 判断（不推荐）</h3>
+<p>Palp 默认的分布式去重有：</p>
+<ul>
+<li>redis set 去重</li>
+<li>redis bloom 去重（默认）</li>
+</ul>
+<p>对应的过滤器如下：</p>
+<ul>
+<li>RedisSetFilter：对应 redis set 去重</li>
+<li>RedisBloomFilter：对应 redis bloom 去重</li>
+</ul>
+<p>使用时需开启以下设置，作用是开启去重并持久化</p>
+<pre><code>FILTER_REQUEST = True
+PERSISTENCE_REQUEST_FILTER = True
+</code></pre>
+<p>【案例】以 redis bloom 去重 为例</p>
+<pre><code>from palp.filter import RequestRedisBloomFilter
+
+is_repeat = False   # 重复标志
+
+for i in response.xpath('//ul[@class=&quot;list_con&quot;]//li'):
+    notice_url = response.urljoin(i.xpath('./a/@href').extract_first())
+
+    req = palp.RequestGet(url=notice_url, callback=self.parse_content)
+
+    # 判断是否重复
+    if RequestRedisBloomFilter().is_repeat(req):
+        break
+
+    yield req
+
+# 翻页
+if not is_repeat and page_now &lt; page_total:
+    pass
+</code></pre>
+<h2 id="_3">快速二次请求</h2>
+<p>基于上一次请求的基础上进行二次请求<br />
+有两种方法：</p>
+<ul>
+<li>原地修改</li>
+<li>request 的 to_dict() 方法获取字典后修改</li>
+</ul>
+<h3 id="_4">原地修改</h3>
+<pre><code>def parse(self, request, response) -&gt; None:
+    request.xxx = xxx   # 修改
+
+    yield request
+</code></pre>
+<h3 id="to_dict">to_dict()</h3>
+<pre><code>request_dict = request.to_dict()
+request_dict[xxx] = xxx # 修改
+
+yield palp.Request(**request_dict)
+</code></pre>
+<h2 id="_5">个性化爬虫</h2>
+<p>比如批次爬虫，根据 redis 获取任务，其实很简单的（仅内置 mysql 批次爬取爬虫）</p>
+<h3 id="_6">关于表</h3>
+<p>可以设置多种状态：已抓取，待抓取，队列中，等等<br />
+大概流程如下：</p>
+<ul>
+<li>不论你什么需求，只要在 start_requests 函数中，设置获取方法</li>
+<li>随后设置为队列中（爬取中）状态</li>
+<li>在 pipeline 中（获取到结果时）设置修改已爬取状态</li>
+</ul>
+<h3 id="redis_1">关于 redis</h3>
+<p>可以设置最简单的 list、或者不重复的 set 或者优先级的 zset<br />
+只要在 start_requests 函数中 直接执行对应的 pop 方法就行</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../alarm/" class="btn btn-neutral float-left" title="Alarm"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../alarm/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
