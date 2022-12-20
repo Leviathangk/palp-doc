@@ -71,7 +71,9 @@
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#_5">创建</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#_6">结构</a>
+    <li class="toctree-l3"><a class="reference internal" href="#_6">设置</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_7">结构</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#task_id">task_id</a>
     </li>
@@ -79,11 +81,11 @@
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#_7">启动爬虫</a>
+    <li class="toctree-l2"><a class="reference internal" href="#_8">启动爬虫</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#_8">爬虫内启动</a>
+    <li class="toctree-l3"><a class="reference internal" href="#_9">爬虫内启动</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#_9">启动文件启动</a>
+    <li class="toctree-l3"><a class="reference internal" href="#_10">启动文件启动</a>
     </li>
         </ul>
     </li>
@@ -246,7 +248,7 @@ if __name__ == '__main__':
 <p>注意：</p>
 <ul>
 <li>继承周期爬虫的【同时需要继承 分布式 或 本地爬虫】才可以执行</li>
-<li>自动导入记录中间件（palp.middleware.CycleSpiderRecordMiddleware）</li>
+<li>手动导入中间件：palp.middleware.CycleSpiderRecordMiddleware</li>
 <li>记录中间件会：自动修改失败、成功的任务状态</li>
 <li>记录中间件会：自动在记录表中添加、修改任务执行情况</li>
 </ul>
@@ -320,7 +322,19 @@ if __name__ == '__main__':
 <h3 id="_5">创建</h3>
 <pre><code>palp create -s baidu 3
 </code></pre>
-<h3 id="_6">结构</h3>
+<h3 id="_6">设置</h3>
+<p>注意：索引是顺序，应该将该中间件放在最后一个</p>
+<pre><code># 启用则修改 task 表中对应任务的失败、生成状态
+REQUEST_MIDDLEWARE = {
+    1: &quot;palp.middleware.CycleSpiderRecordMiddleware&quot;,
+}
+
+# 启用则生成、汇总 record 表单批次爬取记录
+SPIDER_MIDDLEWARE = {
+    1: 'palp.middleware.CycleSpiderRecordMiddleware',
+}
+</code></pre>
+<h3 id="_7">结构</h3>
 <pre><code>import palp
 
 
@@ -367,11 +381,11 @@ spider.set_task_state_failed(task_id=xxx)
 <li>spider_close： 结束时，更新 record 表，汇总结果</li>
 </ul>
 <p>当你想一直更新 record 表，那么可以自己去写实现，只需调用 CycleSpider 的方法即可</p>
-<h2 id="_7">启动爬虫</h2>
-<h3 id="_8">爬虫内启动</h3>
+<h2 id="_8">启动爬虫</h2>
+<h3 id="_9">爬虫内启动</h3>
 <pre><code>BaiduSpider(thread_count=1).start() # 启动可选参数看源码
 </code></pre>
-<h3 id="_9">启动文件启动</h3>
+<h3 id="_10">启动文件启动</h3>
 <p>注意：是进程形式启动，推荐直接使用 start.py 即可，可同时启动多个爬虫</p>
 <p>参数介绍</p>
 <ul>
