@@ -67,7 +67,7 @@
               <ul class="current">
                 <li class="toctree-l1 current"><a class="reference internal current" href="./">Item</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#item_1">Item</a>
+    <li class="toctree-l2"><a class="reference internal" href="#lazyitem">LazyItem</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#strictitem">StrictItem</a>
     </li>
@@ -117,22 +117,22 @@
 <p>通过 yield item 将数据发送到 pipeline 进行保存<br />
 Item 提供了两种</p>
 <ul>
-<li>Item</li>
+<li>LazyItem</li>
 <li>StrictItem</li>
 </ul>
-<h2 id="item_1">Item</h2>
-<p>懒人 item 不需要定义字段，但是最好有多个就写不同的名字做区分<br />
+<h2 id="lazyitem">LazyItem</h2>
+<p>即：懒人 item，不需要定义字段，但是最好有多个就写不同的名字做区分<br />
 【创建】</p>
 <pre><code>import palp
 
 
-class Item(palp.Item):
+class LazyItem(palp.LazyItem):
     &quot;&quot;&quot;
         通用、懒人 item
     &quot;&quot;&quot;
 </code></pre>
 <p>【使用】</p>
-<pre><code>yield Item(**{'xxx':'yyy'})
+<pre><code>yield LazyItem(**{'xxx':'yyy'})
 </code></pre>
 <h2 id="strictitem">StrictItem</h2>
 <p>严格 item，需要定义哪些字段被允许通过，非定义字段将抛出 NotStrictItemFieldException 错误</p>
