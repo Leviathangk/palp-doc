@@ -167,8 +167,12 @@ palp.send_dingtalk().send_text(content='测试消息')
 </code></pre>
 <p>【DistributiveSpider】</p>
 <ul>
-<li>分布式爬虫执行完毕会将结果汇总到 settings.REDIS_KEY_STOP 字段</li>
+<li>分布式爬虫执行完毕会将结果汇总到 settings.REDIS_KEY_STOP 字段（只有一个机器做这个事）</li>
 <li>分布式爬虫的每个机器的单独情况会在 settings.REDIS_KEY_RECORD 字段</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li>只有最后一个机器去汇总结果，所以这里要去判断 settings.REDIS_KEY_STOP 字段是否含有 all</li>
 </ul>
 <pre><code>def spider_close(self, spider) -&gt; None:
     &quot;&quot;&quot;
@@ -182,13 +186,14 @@ palp.send_dingtalk().send_text(content='测试消息')
     from palp.conn import redis_conn
 
     spider_record = json.loads(redis_conn.get(settings.REDIS_KEY_STOP).decode())
-    request_all = spider_record['all']
-    request_failed = spider_record['failed']
-    request_succeed = spider_record['succeed']
+    if spider_record.get('all'):
+        request_all = spider_record['all']
+        request_failed = spider_record['failed']
+        request_succeed = spider_record['succeed']
 
-    palp.send_dingtalk().send_text(
-        content=f'执行完毕，当前处理情况：\n总量：{request_all}\n失败量：{request_failed}\n成功量：{request_succeed}'
-    )
+        palp.send_dingtalk().send_text(
+            content=f'执行完毕，当前处理情况：\n总量：{request_all}\n失败量：{request_failed}\n成功量：{request_succeed}'
+        )
 </code></pre>
               
             </div>
