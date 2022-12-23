@@ -199,7 +199,11 @@ if __name__ == '__main__':
 
 </code></pre>
 <h2 id="distributivespider">DistributiveSpider</h2>
-<p>注意：分布式爬虫，需要在设置中增加 redis 连接</p>
+<p>注意：</p>
+<ul>
+<li>分布式爬虫，需要在设置中增加 redis 连接</li>
+<li>分布式爬虫默认为优先级队列，本身具有去重的功能，如果有大量必要的重复请求，修改 settings.REQUEST_QUEUE_MODE = 1</li>
+</ul>
 <h3 id="_3">创建</h3>
 <pre><code>palp create -s baidu 2
 </code></pre>
