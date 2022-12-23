@@ -271,7 +271,7 @@ class RequestMiddleware(palp.RequestMiddleware):
         &quot;&quot;&quot;
 
         # 给所有 url 都添加代理
-        if settings.REQUEST_PROXIES_TUNNEL_URL:
+        if settings.REQUEST_PROXIES_TUNNEL_URL and not request.proxies:
             request.proxies = {
                 'http': settings.REQUEST_PROXIES_TUNNEL_URL,
                 'https': settings.REQUEST_PROXIES_TUNNEL_URL,
@@ -280,7 +280,7 @@ class RequestMiddleware(palp.RequestMiddleware):
         # 指定域名添加代理
         allow_domains = ['xxx']
 
-        if settings.REQUEST_PROXIES_TUNNEL_URL:
+        if settings.REQUEST_PROXIES_TUNNEL_URL and not request.proxies:
             if request.domain in allow_domains:
                 request.proxies = {
                     'http': settings.REQUEST_PROXIES_TUNNEL_URL,
