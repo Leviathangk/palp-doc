@@ -129,6 +129,7 @@
 </ul>
 <h2 id="_2">参数</h2>
 <ul>
+<li>meta：自动向下传递参数，不需要手动传，需要一个字典</li>
 <li>filter_repeat：是否过滤请求（默认不过滤）</li>
 <li>keep_session：是否保持 session 自动 cookie，tls 连接</li>
 <li>keep_cookie：自动 cookieJar</li>
@@ -142,6 +143,7 @@
 <p>除了 requests、httpx 参数常用外，还可以通过 command 指定其它参数，方便自定义请求器时使用</p>
 <h2 id="_3">注意</h2>
 <ul>
+<li>meta 是自动传递的，临时的直接 xxx=yyy</li>
 <li>请求过滤默认是不开启的，需要开启 settings.FILTER_REQUEST（普通过滤）</li>
 <li>在开启普通过滤的情况下，可以选择开启 settings.STRICT_FILTER（严格过滤）加锁，严重影响性能，不推荐</li>
 <li>keep_session 虽然可以提高部分效率，但是除非你对 cookie 要求不高，否则分布式 cookie 无法随着请求发到其他机器</li>
@@ -152,7 +154,7 @@
 <h2 id="_4">使用</h2>
 <pre><code>from palp import RequestGet
 
-yield RequestGet(url='xxx')
+yield RequestGet(url='xxx', meta={'xxx': 'yyy'})
 </code></pre>
               
             </div>
