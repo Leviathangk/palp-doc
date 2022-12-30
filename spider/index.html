@@ -81,11 +81,19 @@
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#_8">启动爬虫</a>
+    <li class="toctree-l2"><a class="reference internal" href="#jumpspider">JumpSpider</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#_9">爬虫内启动</a>
+    <li class="toctree-l3"><a class="reference internal" href="#_8">创建</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#_10">启动文件启动</a>
+    <li class="toctree-l3"><a class="reference internal" href="#_9">使用</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_10">启动爬虫</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_11">爬虫内启动</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_12">启动文件启动</a>
     </li>
         </ul>
     </li>
@@ -153,6 +161,7 @@
 <li>LocalSpider：本地爬虫</li>
 <li>DistributiveSpider：分布式爬虫</li>
 <li>CycleSpider：周期爬虫（根据需求可继承本地、分布式）</li>
+<li>JumpSpider：跳转爬虫（基于内存队列，用于频繁的验证码、登录的确认更新 cookie）</li>
 </ul>
 <h2 id="localspider">LocalSpider</h2>
 <p>本地爬虫，不支持分布式</p>
@@ -385,11 +394,39 @@ spider.set_task_state_failed(task_id=xxx)
 <li>spider_close： 结束时，更新 record 表，汇总结果</li>
 </ul>
 <p>当你想一直更新 record 表，那么可以自己去写实现，只需调用 CycleSpider 的方法即可</p>
-<h2 id="_8">启动爬虫</h2>
-<h3 id="_9">爬虫内启动</h3>
+<h2 id="jumpspider">JumpSpider</h2>
+<p>这是用来解决频繁的登录、验证的，避免逻辑混乱
+该 spider 和其余 spider 没有关系，不走任何中间件，是完全独立的</p>
+<p>该 spider 含有以下方法</p>
+<ul>
+<li>spider_start：执行开始时的方法</li>
+<li>spider_close：执行结束时的方法</li>
+<li>jump_out：自动合并 cookie、meta（可根据需求重写）</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li>spider 运行错误时，将会将输入请求放入 redis 失败队列（分布式时）</li>
+</ul>
+<h3 id="_8">创建</h3>
+<pre><code>palp create baidu 4
+</code></pre>
+<h3 id="_9">使用</h3>
+<p>JumpSpider 内注意判断状态<br />
+不正常的时候可以 yield 原始请求，达到循环的目的，直到达到我们的需求，再去执行正常代码</p>
+<p>【示例】</p>
+<pre><code>yield RequestGet(
+    url='xx',
+    jump_spider='xxx',  # 导入 JumpSpider（不需要实例化）
+    jump_spider_kwargs={},  # 导入的参数 JumpSpider 中 self.xxx 访问
+    jump_request_middleware='xxx',   # 导入请求中间件（不需要实例化）
+    callback='xxx'
+)
+</code></pre>
+<h2 id="_10">启动爬虫</h2>
+<h3 id="_11">爬虫内启动</h3>
 <pre><code>BaiduSpider(thread_count=1).start() # 启动可选参数看源码
 </code></pre>
-<h3 id="_10">启动文件启动</h3>
+<h3 id="_12">启动文件启动</h3>
 <p>注意：是进程形式启动，推荐直接使用 start.py 即可，可同时启动多个爬虫</p>
 <p>参数介绍</p>
 <ul>
