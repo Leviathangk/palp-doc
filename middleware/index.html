@@ -180,7 +180,7 @@ class SpiderMiddleware(palp.SpiderMiddleware):
 <li>request_error：请求出错时干什么（默认重试 3 次 settings.REQUEST_RETRY_TIMES）</li>
 <li>request_failed：请求失败时干什么（3 次后还失败，走这里）</li>
 <li>request_close：请求结束时干什么（执行完毕后走这里）</li>
-<li>request_record：请求结束的结果记录（执行完毕后走这里）</li>
+<li>request_record：请求结束的结果记录（执行完毕后走这里，JumpSpider 不走该函数）</li>
 </ul>
 <p>注意：</p>
 <ul>

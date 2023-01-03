@@ -263,7 +263,7 @@ if __name__ == '__main__':
 <ul>
 <li>继承周期爬虫的【同时需要继承 分布式 或 本地爬虫】才可以执行</li>
 <li>手动导入中间件：palp.middleware.CycleSpiderRecordMiddleware</li>
-<li>记录中间件会：自动修改失败、成功的任务状态</li>
+<li>记录中间件会：自动修改失败、成功的任务状态（request 传递 task_id 时，或自己调用）</li>
 <li>记录中间件会：自动在记录表中添加、修改任务执行情况</li>
 </ul>
 <p>含有以下方法：</p>
@@ -379,7 +379,7 @@ if __name__ == '__main__':
 <h3 id="task_id">task_id</h3>
 <p>注意到这里传递了 task_id，那么什么时候传递 task_id？</p>
 <ul>
-<li>首先：task_id 代表 task 的 id，Request 中传递则代表当当前请求成功时 == 任务执行成功</li>
+<li>首先：task_id 代表 task 的 id，Request 中传递则代表当当前请求成功时 == 任务执行成功，框架自带更新状态</li>
 <li>task 字段就是一个 url，请求成功视为执行成功</li>
 <li>task 字段不是 url，那么就不需要 task_id 字段，只有在你觉得这个 task 执行结束时调用以下代码（比如 pipeline 收到指定数据）</li>
 </ul>
@@ -392,7 +392,7 @@ spider.set_task_state_failed(task_id=xxx)
 <li>spider_start： 启动时创建记录表初始记录（record 表）</li>
 <li>request_failed： 传递 task_id 时，记录失败的请求（ task 表）</li>
 <li>request_close： 传递 task_id 时，记录成功的请求（ task 表）</li>
-<li>spider_close： 结束时，更新 record 表，汇总结果</li>
+<li>request_record： spider 结束时，更新 record 表，汇总结果</li>
 </ul>
 <p>当你想一直更新 record 表，那么可以自己去写实现，只需调用 CycleSpider 的方法即可</p>
 <h2 id="jumpspider">JumpSpider</h2>
