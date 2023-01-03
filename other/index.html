@@ -115,6 +115,8 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#middleware">middleware 判断</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_7">案例</a>
+    </li>
         </ul>
     </li>
     </ul>
@@ -259,6 +261,47 @@ REQUEST_BROORW_COOKIE_DELETE_WHEN_START = True  # 启动时删除所有 cookie�
         request.jump_spider = LoginJumpSpider
         request.jump_request_middleware = ProxyRequestMiddleware
         return request
+</code></pre>
+<h3 id="_7">案例</h3>
+<pre><code>&quot;&quot;&quot;
+Create on 2023-01-03 10:45:25.681820
+----------
+@summary:
+----------
+@author:
+&quot;&quot;&quot;
+import palp
+
+
+class BaiduLocalSpider(palp.DistributiveSpider):
+    spider_name = &quot;baidu&quot;  # 自定义的名字
+    spider_domains = []  # 允许通过的域名，默认不限制
+    spider_settings = None  # 字典形式或导入形式的设置
+
+    def start_requests(self) -&gt; None:
+        &quot;&quot;&quot;
+        起始函数
+
+        :return:
+        &quot;&quot;&quot;
+        for i in range(2):
+            yield palp.RequestGet(&quot;https://www.baidu.com&quot;, keep_cookie=True)
+            time.sleep(5)
+
+    def parse(self, request, response) -&gt; None:
+        &quot;&quot;&quot;
+        解析函数
+
+        :param request:
+        :param response:
+        :return:
+        &quot;&quot;&quot;
+        print(request.cookie_jar.get_cookie())  # 可以看到两次是一样的 cookie
+        self.recycle_request(request=request)
+
+
+if __name__ == '__main__':
+    BaiduLocalSpider(thread_count=1).start()
 </code></pre>
               
             </div>
