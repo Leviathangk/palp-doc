@@ -77,7 +77,7 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#_3">注意</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#_4">使用</a>
+    <li class="toctree-l2"><a class="reference internal" href="#meta">使用 meta</a>
     </li>
     </ul>
                 </li>
@@ -151,10 +151,17 @@
 <li>请求队列默认是 优先级队列，想修改通过 settings.REQUEST_QUEUE_MODE 修改</li>
 <li>优先级队列，本身就有过滤重复请求的作用！！！</li>
 </ul>
-<h2 id="_4">使用</h2>
-<pre><code>from palp import RequestGet
+<h2 id="meta">使用 meta</h2>
+<p>只要记住一点，meta 是在上一个请求上面</p>
+<pre><code># 删除字段
+del request.meta['']
 
-yield RequestGet(url='xxx', meta={'xxx': 'yyy'})
+# 清空 meta
+request.meta.clear()
+
+# 更新 meta
+request.meta.update()   # 方法1
+yield RequestGet(url='xxx', meta={'xxx': 'yyy'})    # 方法2：这里会与之前的 meta 进行合并
 </code></pre>
               
             </div>
