@@ -262,7 +262,7 @@ if __name__ == '__main__':
 <p>注意：</p>
 <ul>
 <li>继承周期爬虫的【同时需要继承 分布式 或 本地爬虫】才可以执行</li>
-<li>手动导入中间件：palp.middleware.CycleSpiderRecordMiddleware</li>
+<li>手动导入中间件：palp.middleware.CycleSpiderRecordMiddleware（不需要 record 表，不需要传递 task_id 时框架设置已爬取，可以不要，自己维护就行了）</li>
 <li>记录中间件会：自动修改失败、成功的任务状态（request 传递 task_id 时，或自己调用）</li>
 <li>记录中间件会：自动在记录表中添加、修改任务执行情况</li>
 </ul>
