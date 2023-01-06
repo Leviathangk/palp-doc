@@ -65,15 +65,27 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#_4">结构</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#borrow_requestrecycle_request">borrow_request、recycle_request</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#settings">settings 开启</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#spider_1">spider 回收</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#middleware">middleware 判断</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#_5">案例</a>
+    </li>
+        </ul>
+    </li>
         </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#cyclespider">CycleSpider</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#_5">创建</a>
+    <li class="toctree-l3"><a class="reference internal" href="#_6">创建</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#_6">设置</a>
+    <li class="toctree-l3"><a class="reference internal" href="#_7">设置</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#_7">结构</a>
+    <li class="toctree-l3"><a class="reference internal" href="#_8">结构</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#task_id">task_id</a>
     </li>
@@ -83,17 +95,17 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#jumpspider">JumpSpider</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#_8">创建</a>
+    <li class="toctree-l3"><a class="reference internal" href="#_9">创建</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#_9">使用</a>
+    <li class="toctree-l3"><a class="reference internal" href="#_10">使用</a>
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#_10">启动爬虫</a>
+    <li class="toctree-l2"><a class="reference internal" href="#_11">启动爬虫</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#_11">爬虫内启动</a>
+    <li class="toctree-l3"><a class="reference internal" href="#_12">爬虫内启动</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#_12">启动文件启动</a>
+    <li class="toctree-l3"><a class="reference internal" href="#_13">启动文件启动</a>
     </li>
         </ul>
     </li>
@@ -256,6 +268,75 @@ class BaiduSpider(palp.DistributiveSpider):
 if __name__ == '__main__':
     BaiduSpider().start()
 </code></pre>
+<h3 id="borrow_requestrecycle_request">borrow_request、recycle_request</h3>
+<p>这是分布式才有的两个函数，目前框架是含有 cookie_jar 共享功能（可自定义）</p>
+<ul>
+<li>borrow_request：决定在什么时候借用共享的参数</li>
+<li>recycle_request：决定在执行完毕时，共享什么参数</li>
+</ul>
+<p>在处理批次任务时，可能一次会有很多任务，对每个任务都去重新请求，获取 cookie 的话（指的是登录、验证码等获取必要
+cookie）将会是灾难</p>
+<p>所以这里解决 cookie 复用，当然要做好 cookie 失效的判断，并重新登录（可在 middleware 判断，并直接返回含有
+jumpspider 的请求）</p>
+<h4 id="settings">settings 开启</h4>
+<pre><code>REQUEST_BORROW = True  # 复用请求参数(分布式时有效，cookie 共享需同时开启 keep_cookie)
+REQUEST_BORROW_DELETE_WHEN_START = True  # 启动时删除所有 BORROW（看需求修改）
+</code></pre>
+<h4 id="spider_1">spider 回收</h4>
+<p>因为 spider 内无法判断是否是最后一个请求，所以需要主动回收</p>
+<pre><code>self.recycle_request(request=request)
+</code></pre>
+<h4 id="middleware">middleware 判断</h4>
+<p>注意：这只是个案例</p>
+<p>该案例是在请求结束时，判断到当前状态不对，随后修改请求，跳转登录，放弃原请求的同时，发出新的请求</p>
+<pre><code>def request_close(self, spider, request, response):
+    if response.status_code != 200:
+        request.jump_spider = LoginJumpSpider
+        request.jump_request_middleware = ProxyRequestMiddleware
+        return request
+</code></pre>
+<h4 id="_5">案例</h4>
+<pre><code>&quot;&quot;&quot;
+Create on 2023-01-03 10:45:25.681820
+----------
+@summary:
+----------
+@author:
+&quot;&quot;&quot;
+import palp
+
+
+class BaiduLocalSpider(palp.DistributiveSpider):
+    spider_name = &quot;baidu&quot;  # 自定义的名字
+    spider_domains = []  # 允许通过的域名，默认不限制
+    spider_settings = None  # 字典形式或导入形式的设置
+
+    def start_requests(self) -&gt; None:
+        &quot;&quot;&quot;
+        起始函数
+
+        :return:
+        &quot;&quot;&quot;
+        for i in range(2):
+            yield palp.RequestGet(&quot;https://www.baidu.com&quot;, keep_cookie=True)
+            time.sleep(5)
+
+    def parse(self, request, response) -&gt; None:
+        &quot;&quot;&quot;
+        解析函数
+
+        :param request:
+        :param response:
+        :return:
+        &quot;&quot;&quot;
+        print(request.cookie_jar.get_cookie())  # 可以看到两次是一样的 cookie
+        self.recycle_request(request=request)
+
+
+if __name__ == '__main__':
+    BaiduLocalSpider(thread_count=1).start()
+
+</code></pre>
 <h2 id="cyclespider">CycleSpider</h2>
 <p>周期爬虫，使用 mysql 创建任务表，并在爬虫内部获取进行抓取</p>
 <p>个人认为，任务需求是多样化的，所以任务表的 task 字段是一个字符串，并且获取的任务是全表字段，这样就可以自定义部分表字段，实现更多需求</p>
@@ -337,10 +418,10 @@ if __name__ == '__main__':
 </tr>
 </tbody>
 </table>
-<h3 id="_5">创建</h3>
+<h3 id="_6">创建</h3>
 <pre><code>palp create -s baidu 3
 </code></pre>
-<h3 id="_6">设置</h3>
+<h3 id="_7">设置</h3>
 <p>注意：索引是顺序，应该将该中间件放在最后一个</p>
 <pre><code># 启用则修改 task 表中对应任务的失败、生成状态
 REQUEST_MIDDLEWARE = {
@@ -352,7 +433,7 @@ SPIDER_MIDDLEWARE = {
     1: 'palp.middleware.CycleSpiderRecordMiddleware',
 }
 </code></pre>
-<h3 id="_7">结构</h3>
+<h3 id="_8">结构</h3>
 <pre><code>import palp
 
 
@@ -412,10 +493,10 @@ spider.set_task_state_failed(task_id=xxx)
 <ul>
 <li>spider 运行错误时，将会将输入请求放入 redis 失败队列（分布式时，需开启对应设置）</li>
 </ul>
-<h3 id="_8">创建</h3>
+<h3 id="_9">创建</h3>
 <pre><code>palp create baidu 4
 </code></pre>
-<h3 id="_9">使用</h3>
+<h3 id="_10">使用</h3>
 <p>JumpSpider 内注意判断状态<br />
 不正常的时候可以 yield 原始请求，达到循环的目的，直到达到我们的需求，再去执行正常代码</p>
 <p>【示例】</p>
@@ -427,11 +508,11 @@ spider.set_task_state_failed(task_id=xxx)
     callback='xxx'
 )
 </code></pre>
-<h2 id="_10">启动爬虫</h2>
-<h3 id="_11">爬虫内启动</h3>
+<h2 id="_11">启动爬虫</h2>
+<h3 id="_12">爬虫内启动</h3>
 <pre><code>BaiduSpider(thread_count=1).start() # 启动可选参数看源码
 </code></pre>
-<h3 id="_12">启动文件启动</h3>
+<h3 id="_13">启动文件启动</h3>
 <p>注意：是进程形式启动，推荐直接使用 start.py 即可，可同时启动多个爬虫</p>
 <p>参数介绍</p>
 <ul>
