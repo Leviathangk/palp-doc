@@ -148,52 +148,22 @@ palp.send_email(receiver='xxx', content_text='palp 执行结束')
 palp.send_dingtalk().send_text(content='测试消息')
 </code></pre>
 <h3 id="_4">实际案例</h3>
-<p>比如在 middleware 中的 spider_close 中使用结束时，发送处理结果</p>
-<p>【LocalSpider】</p>
-<pre><code>def spider_close(self, spider) -&gt; None:
+<p>比如在 middleware 中的 request_record 中发送处理结果</p>
+<pre><code>def request_record(self, spider, record: dict) -&gt; None:
     &quot;&quot;&quot;
-    spider 结束的操作
+    请求结果记录（在 spider 结束时调用）
 
     :param spider:
+    :param record: {'all': 0, 'failed': 0, 'succeed': 0} 样式的字典
     :return:
     &quot;&quot;&quot;
-    request_all = spider.spider_record['all']
-    request_failed = spider.spider_record['failed']
-    request_succeed = spider.spider_record['succeed']
+    request_all = record['all']
+    request_failed = record['failed']
+    request_succeed = record['succeed']
 
     palp.send_dingtalk().send_text(
         content=f'执行完毕，当前处理情况：\n总量：{request_all}\n失败量：{request_failed}\n成功量：{request_succeed}'
     )
-</code></pre>
-<p>【DistributiveSpider】</p>
-<ul>
-<li>分布式爬虫执行完毕会将结果汇总到 settings.REDIS_KEY_STOP 字段（只有一个机器做这个事）</li>
-<li>分布式爬虫的每个机器的单独情况会在 settings.REDIS_KEY_RECORD 字段</li>
-</ul>
-<p>注意：</p>
-<ul>
-<li>只有最后一个机器去汇总结果，所以这里要去判断 settings.REDIS_KEY_STOP 字段是否含有 all</li>
-</ul>
-<pre><code>def spider_close(self, spider) -&gt; None:
-    &quot;&quot;&quot;
-    spider 结束的操作
-
-    :param spider:
-    :return:
-    &quot;&quot;&quot;
-    logger.debug(f'本次耗时：{time.time() - self.start_time}')
-
-    from palp.conn import redis_conn
-
-    spider_record = json.loads(redis_conn.get(settings.REDIS_KEY_STOP).decode())
-    if spider_record.get('all'):
-        request_all = spider_record['all']
-        request_failed = spider_record['failed']
-        request_succeed = spider_record['succeed']
-
-        palp.send_dingtalk().send_text(
-            content=f'执行完毕，当前处理情况：\n总量：{request_all}\n失败量：{request_failed}\n成功量：{request_succeed}'
-        )
 </code></pre>
               
             </div>

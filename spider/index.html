@@ -317,9 +317,8 @@ class BaiduLocalSpider(palp.DistributiveSpider):
 
         :return:
         &quot;&quot;&quot;
-        for i in range(2):
-            yield palp.RequestGet(&quot;https://www.baidu.com&quot;, keep_cookie=True)
-            time.sleep(5)
+        yield palp.RequestGet(&quot;https://www.baidu.com&quot;, keep_cookie=True)
+        yield palp.RequestGet(&quot;https://www.baidu.com&quot;, keep_cookie=True)
 
     def parse(self, request, response) -&gt; None:
         &quot;&quot;&quot;
