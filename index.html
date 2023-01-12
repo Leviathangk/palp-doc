@@ -83,7 +83,7 @@
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="alarm/">Alarm</a>
+                <li class="toctree-l1"><a class="reference internal" href="tool/">Tool</a>
                 </li>
               </ul>
               <ul>
@@ -119,20 +119,21 @@
 整体使用方式和 scrapy 类似，但有以下特点</p>
 <ul>
 <li>同一个项目可以存放多个不同的 spider，spider 可以拥有各自的 settings</li>
-<li>无感分布式，不需要内网，只需要 redis，分布式与非分布式仅继承的类不同</li>
+<li>无感分布式，随时添加 slave，不需要内网，只需要 redis，分布式与非分布式仅继承的类不同</li>
+<li>master 仅分发任务，无真正的 master，死机自动切换</li>
 <li>自动 cookiejar 仅需要使用 keep_cookie 即可</li>
 <li>自带 requests（默认）、httpx 两种请求器，并可自定义请求器（同时需要自定义解析器）</li>
 <li>自动 join response url</li>
-<li>数据、任务防丢，续接（分布式）</li>
 <li>数据、任务失败后自动回收，启动自动接续（需开启对应设置）</li>
-<li>成功、失败任务自动统计</li>
+<li>成功、失败任务自动统计到 request_record</li>
 <li>分布式时，大量任务的 cookie、参数 复用</li>
 <li>内含 JumpSpider（辅助型） 用于执行频繁的验证、登录操作等，简化代码逻辑</li>
+<li>内含 Checker，可以用来判断网站状态，并选择阻拦新请求直到恢复或停止 spider 执行</li>
 </ul>
 <p>但有以下注意点：</p>
 <ul>
-<li>默认不对 item、request 进行去重</li>
-<li>去重一般为普通去重（默认），也有严格去重（需开启），严格去重时，会有锁、分布式锁</li>
+<li>默认不去重，但是默认是优先级队列，分布式时的 redis zset 具备一定的去重效果</li>
+<li>开启去重时，去重一般为普通去重（默认），也有严格去重（需开启），严格去重时，会有锁、分布式锁</li>
 </ul>
 <h2 id="_2">安装</h2>
 <pre><code>pip install palp
@@ -184,5 +185,5 @@
 
 <!--
 MkDocs version : 1.4.2
-Build Date UTC : 2023-01-11 02:02:15.976619+00:00
+Build Date UTC : 2023-01-12 01:52:44.456270+00:00
 -->
