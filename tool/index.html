@@ -229,6 +229,7 @@ Checker.failed_limit = 1
 class CheckRequestMiddleware(palp.RequestMiddleware):
     def request_in(self, spider, request) -&gt; None:
         Checker.check_and_wait()    # 连续 3 次失败将会阻拦所有请求，直到状态恢复
+        Checker.check_and_stop(spider=spider)    # 连续 3 次失败将会停止 spider 执行
 </code></pre>
               
             </div>
