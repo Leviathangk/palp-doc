@@ -279,7 +279,7 @@ cookie）将会是灾难</p>
 <p>所以这里解决 cookie 复用，当然要做好 cookie 失效的判断，并重新登录（可在 middleware 判断，并直接返回含有
 jumpspider 的请求）</p>
 <h4 id="settings">settings 开启</h4>
-<pre><code>REQUEST_BORROW = False  # 分发大量任务时，需要在请求中传递的参数（默认回收 cookie、meta 复用）
+<pre><code>REQUEST_BORROW = False  # 分发大量任务时，需要在请求中传递的参数（默认回收 cookie 复用）
 REQUEST_BORROW_DELETE_WHEN_START = True  # 启动时删除所有 BORROW（非分布式是在内存里，该选项忽略）
 </code></pre>
 <h4 id="spider_1">spider 回收</h4>
