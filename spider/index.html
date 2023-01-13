@@ -269,7 +269,7 @@ if __name__ == '__main__':
     BaiduSpider().start()
 </code></pre>
 <h3 id="borrow_requestrecycle_request">borrow_request、recycle_request</h3>
-<p>这是分布式才有的两个函数，目前框架是含有 cookie_jar 共享功能（可自定义）</p>
+<p>目前框架是根据以上两个函数实现 cookie_jar 共享功能（可自定义）</p>
 <ul>
 <li>borrow_request：决定在什么时候借用共享的参数</li>
 <li>recycle_request：决定在执行完毕时，共享什么参数</li>
@@ -279,8 +279,8 @@ cookie）将会是灾难</p>
 <p>所以这里解决 cookie 复用，当然要做好 cookie 失效的判断，并重新登录（可在 middleware 判断，并直接返回含有
 jumpspider 的请求）</p>
 <h4 id="settings">settings 开启</h4>
-<pre><code>REQUEST_BORROW = True  # 复用请求参数(分布式时有效，cookie 共享需同时开启 keep_cookie)
-REQUEST_BORROW_DELETE_WHEN_START = True  # 启动时删除所有 BORROW（看需求修改）
+<pre><code>REQUEST_BORROW = False  # 分发大量任务时，需要在请求中传递的参数（默认回收 cookie、meta 复用）
+REQUEST_BORROW_DELETE_WHEN_START = True  # 启动时删除所有 BORROW（非分布式是在内存里，该选项忽略）
 </code></pre>
 <h4 id="spider_1">spider 回收</h4>
 <p>因为 spider 内无法判断是否是最后一个请求，所以需要主动回收</p>

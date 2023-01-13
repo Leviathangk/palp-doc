@@ -208,10 +208,13 @@ Checker.failed_limit = 1
 <ul>
 <li>check_and_wait：当连续错误达到 failed_limit 之后，阻拦所有请求，直到释放</li>
 <li>check_and_stop：当连续错误达到 failed_limit 之后，停止所有新请求的处理（一旦中断无法挽回，只能重启）</li>
+<li>stop_spider：停止所有新请求的处理（使用以上方法，不需要主动调用）</li>
 </ul>
 <p>注意：</p>
 <ul>
 <li>内部是调用的 _need_stop() 函数，所以可以控制频率、容错</li>
+<li>这里的停止是温和的，只是阻断新请求从队列中接收</li>
+<li>check_and_wait 的 timeout 非精确时间，受 check_time 影响会有一定误差</li>
 </ul>
 <h3 id="_7">案例</h3>
 <p>当百度访问状态码不是 200 时，将会停止 spider 函数执行，直到访问是 200</p>
@@ -228,7 +231,8 @@ Checker.failed_limit = 1
 
 class CheckRequestMiddleware(palp.RequestMiddleware):
     def request_in(self, spider, request) -&gt; None:
-        Checker.check_and_wait()    # 连续 3 次失败将会阻拦所有请求，直到状态恢复
+        Checker.check_and_wait(spider=spider)    # 连续 3 次失败将会阻拦所有请求，直到状态恢复
+        Checker.check_and_wait(spider=spider, timeout=1*60*60)    # 连续 3 次失败将会阻拦所有请求，达到指定超时时间停止 spider，避免死循环
         Checker.check_and_stop(spider=spider)    # 连续 3 次失败将会停止 spider 执行
 </code></pre>
               
