@@ -212,6 +212,7 @@ Checker.failed_limit = 1
 </ul>
 <p>注意：</p>
 <ul>
+<li>暂时分布式时，检查函数会调用多次</li>
 <li>内部是调用的 _need_stop() 函数，所以可以控制频率、容错</li>
 <li>这里的停止是温和的，只是阻断新请求从队列中接收</li>
 <li>check_and_wait 的 timeout 非精确时间，受 check_time 影响会有一定误差</li>
