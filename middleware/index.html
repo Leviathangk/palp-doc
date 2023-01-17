@@ -133,7 +133,8 @@
 <ul>
 <li>spider_start：爬虫启动时干什么</li>
 <li>spider_error：爬虫出错时干什么</li>
-<li>spider_close：爬虫结束时干什么（必定会执行）</li>
+<li>spider_close：爬虫结束时干什么（必定会执行，一般用来资源回收）</li>
+<li>spider_end：爬虫结束时干什么(分布式时只执行一次，一般用来发送信息)</li>
 </ul>
 <h3 id="_1">结构</h3>
 <pre><code>import palp
@@ -166,6 +167,14 @@ class SpiderMiddleware(palp.SpiderMiddleware):
         :param spider:
         :return:
         &quot;&quot;&quot;
+
+    def spider_close(self, spider) -&gt; None:
+        &quot;&quot;&quot;
+        spider 结束的操作（分布式时只执行一次）
+
+        :param spider:
+        :return:
+        &quot;&quot;&quot;
 </code></pre>
 <h3 id="_2">设置</h3>
 <p>注意：这里的 1 代表顺序</p>
@@ -180,7 +189,7 @@ class SpiderMiddleware(palp.SpiderMiddleware):
 <li>request_error：请求出错时干什么（默认重试 3 次 settings.REQUEST_RETRY_TIMES）</li>
 <li>request_failed：请求失败时干什么（3 次后还失败，走这里）</li>
 <li>request_close：请求结束时干什么（执行完毕后走这里）</li>
-<li>request_record：请求结束的结果记录（执行完毕后走这里，JumpSpider 不走该函数）</li>
+<li>request_record：请求结束的结果记录（执行完毕后走这里，分布式只走一次，JumpSpider 不走该函数）</li>
 </ul>
 <p>注意：</p>
 <ul>
